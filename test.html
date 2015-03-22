@@ -1,0 +1,190 @@
+<html>
+	<head>
+		<title>
+			Game
+		</title>
+		
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+		<script type="text/javascript">
+
+			function animat(k)
+			{
+				switch (k)
+				{
+					case "r" : 	
+						$(".red")
+							.animate({opacity:1}, "slow")
+							.animate({opacity:0.6}, "slow"); 
+						break;
+					
+					case "b" : 
+						$(".blue")
+							.animate({opacity:1}, "slow")
+							.animate({opacity:0.6}, "slow"); 
+						break;
+
+					case "y" : 
+						$(".yellow")
+							.animate({opacity:1}, "slow")
+							.animate({opacity:0.6}, "slow"); 
+						break;
+
+					case "g" : 
+						$(".green")
+							.animate({opacity:1}, "slow")
+							.animate({opacity:0.6}, "slow"); 
+						break;
+				}
+			}
+
+			function glow(cass)
+			{
+				//get the current pattern
+				// cass = "ggy";
+				var cur = cass;
+				
+				//animate each character of the pattern
+				for (var i=0; i<cur.length; i++)
+				{
+					var t = i*1200;
+					setTimeout(function(i){
+						animat(cur.charAt(i));
+					}, t, i);
+				}
+			}
+
+			function simon()
+			{
+				var col;
+
+				//find new color to append to pattern
+				var val = Math.random();
+				
+				if (val<0.25)
+					col = "r";
+				else if (val<0.5)
+					col = "b";
+				else if (val<0.75)
+					col = "y";
+				else col = "g";
+
+				//set the actual value to the new pattern
+				var cur = $(".actual").attr("value");
+				cur += col;
+				$(".actual").attr("value",cur);
+
+				//show the new pattern
+				glow(cur);
+			}
+
+			function checksimon(k)
+			{
+				//if no game in progress
+				if ($(".actual").attr("value") == "")
+					return;
+
+				//get player's move till now and new move to them
+				var pl = $(".player").attr("value");
+				pl += k;
+
+				//get the actual pattern
+				var ac = $(".actual").attr("value");
+
+				//if current player string is at beginning of actual string
+				if (ac.indexOf(pl) == 0)
+				{
+					//glow the current string
+					glow(k);
+
+					//set players value to old value + new color
+					$(".player").attr("value",pl);
+
+					//if player completes the level
+					if (ac == pl)
+					{
+						console.log("good job");
+						//reset player's value
+						$(".player").attr("value","");
+						simon();
+					}
+				}
+				else
+				{
+					alert("Game Over");
+					$(".actual").attr("value","");
+				}
+			}
+
+			$(function(){
+
+				$("button").click(function(){
+					//start a new game : erase old data
+					$(".actual").attr("value","");
+					$(".player").attr("value","");
+					//begin game
+					simon();
+				});
+
+				$(".red").click(function(){
+					checksimon("r");
+				});
+
+				$(".blue").click(function(){
+					checksimon("b");
+				});
+
+				$(".yellow").click(function(){
+					checksimon("y");
+				});
+
+				$(".green").click(function(){
+					checksimon("g");
+				});
+			});
+		</script>
+	
+	</head>
+
+	<body>
+		
+		<style type="text/css">	
+
+			.sbut
+			{
+				opacity: 0.6;
+				display: inline;
+			}
+
+		</style>
+
+		<input type="hidden" class="actual" value="">  </input>
+		<input type="hidden" class="player" value="">  </input>
+
+		<div class="red sbut" >
+		<img src="images/red.jpg">
+		</div>
+
+		<div class="blue sbut">
+		<img src="images/blue.jpg">
+		</div>
+
+		<br>
+
+		<div class="yellow sbut">
+		<img src="images/yellow.jpg">
+		</div>
+
+		<div class="green sbut">
+		<img src="images/green.jpeg">
+		</div>
+
+		<br><br>
+
+		<button class="but"> Start </button>
+
+	</body> 
+</html>
+
+
+
